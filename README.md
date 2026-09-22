@@ -3,10 +3,10 @@
 **Fizz** — AITuber system in [Almide](https://github.com/almide/almide) — の
 persona オンディスク形式契約。
 
-[openaituber](https://github.com/Aid-On/openaituber) の
+[openaituber](https://github.com/aiviecast/openaituber) の
 `docs/almide-component-breakdown.md` §1 で定義した契約のうち、
 **persona-format** を担う。ランタイムのワイヤ契約は
-[fizz-protocol](https://github.com/Aid-On/fizz-protocol)。
+[fizz-protocol](https://github.com/aiviecast/fizz-protocol)。
 
 kotodama の `personae/<name>/` 構成 (spec.json / system.md / voice.json /
 world.json / transforms.json / triggers.json) と decode 互換。
@@ -16,7 +16,7 @@ world.json / transforms.json / triggers.json) と decode 互換。
 ```toml
 # almide.toml
 [dependencies]
-fizz_persona = { git = "https://github.com/Aid-On/fizz-persona", tag = "v0.1.0" }
+fizz_persona = { git = "https://github.com/aiviecast/fizz-persona", tag = "v0.1.0" }
 ```
 
 ## On-disk layout
