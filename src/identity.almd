@@ -41,7 +41,7 @@ type PersonaSpec = {
 
 // ── JSON ヘルパ (local) ──────────────────────────────────────────────
 
-local fn jget(v: Value, key: String) -> Value = value.get(v, key) ?? value.null()
+local fn jget(v: Value, key: String) -> Value = value.field(v, key) ?? value.null()
 
 local fn jstr(v: Value, key: String) -> Option[String] =
   result.to_option(value.as_string(jget(v, key)))
@@ -53,10 +53,10 @@ local fn jstr_list(v: Value, key: String) -> List[String] =
 
 local fn jstr_map(v: Value, key: String) -> Map[String, String] = {
   let o = jget(v, key)
-  let ks: List[String] = json.keys(o)
+  let ks: List[String] = value.keys(o)
   var m: Map[String, String] = [:]
   for k in ks {
-    match result.to_option(value.as_string(value.get(o, k) ?? value.null())) {
+    match result.to_option(value.as_string(value.field(o, k) ?? value.null())) {
       some(s) => { m[k] = s },
       none    => (),
     }
