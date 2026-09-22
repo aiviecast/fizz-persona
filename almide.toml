@@ -1,4 +1,4 @@
 [package]
 name = "fizz_persona"
-version = "0.2.0"
+version = "0.2.1"
 description = "Fizz AITuber system — persona on-disk format contract (spec / voice / world / transforms / triggers / few-shot examples)"
