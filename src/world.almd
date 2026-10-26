@@ -24,7 +24,7 @@ type World = {
 
 // ── JSON ヘルパ (local) ──────────────────────────────────────────────
 
-local fn jget(v: Value, key: String) -> Value = value.field(v, key) ?? value.null()
+local fn jget(v: Value, key: String) -> Value = value.get(v, key) ?? value.null()
 
 local fn jstr(v: Value, key: String) -> Option[String] =
   result.to_option(value.as_string(jget(v, key)))
@@ -39,11 +39,11 @@ local fn jstr_list(v: Value, key: String) -> List[String] =
 
 local fn asset_encode(a: WorldAsset) -> Value =
   value.object([
-    ("name", value.str(a.name)),
-    ("role", value.str(a.role)),
-    ("note", value.str(a.note)),
-    ("themes", value.array(list.map(a.themes, (t) => value.str(t)))),
-    ("when_to_invoke", value.str(a.when_to_invoke)),
+    ("name", value.string(a.name)),
+    ("role", value.string(a.role)),
+    ("note", value.string(a.note)),
+    ("themes", value.array(list.map(a.themes, (t) => value.string(t)))),
+    ("when_to_invoke", value.string(a.when_to_invoke)),
   ])
 
 local fn asset_decode(v: Value) -> Option[WorldAsset] = {

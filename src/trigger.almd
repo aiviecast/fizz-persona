@@ -21,7 +21,7 @@ type Triggers = {
 
 // ── JSON ヘルパ (local) ──────────────────────────────────────────────
 
-local fn jget(v: Value, key: String) -> Value = value.field(v, key) ?? value.null()
+local fn jget(v: Value, key: String) -> Value = value.get(v, key) ?? value.null()
 
 local fn jstr(v: Value, key: String) -> Option[String] =
   result.to_option(value.as_string(jget(v, key)))
@@ -36,8 +36,8 @@ local fn jstr_list(v: Value, key: String) -> List[String] =
 
 local fn rule_encode(r: TriggerRule) -> Value =
   value.object([
-    ("pattern", value.str(r.pattern)),
-    ("suggest", value.array(list.map(r.suggest, (s) => value.str(s)))),
+    ("pattern", value.string(r.pattern)),
+    ("suggest", value.array(list.map(r.suggest, (s) => value.string(s)))),
   ])
 
 local fn rule_decode(v: Value) -> Option[TriggerRule] = {
@@ -48,7 +48,7 @@ local fn rule_decode(v: Value) -> Option[TriggerRule] = {
 
 fn triggers_encode(t: Triggers) -> Value =
   value.object(
-    (match t.comment { some(c) => [("comment", value.str(c))], none => [] })
+    (match t.comment { some(c) => [("comment", value.string(c))], none => [] })
       + [("rules", value.array(list.map(t.rules, rule_encode)))])
 
 fn triggers_decode(v: Value) -> Result[Triggers, String] =

@@ -41,7 +41,7 @@ type PersonaSpec = {
 
 // ── JSON ヘルパ (local) ──────────────────────────────────────────────
 
-local fn jget(v: Value, key: String) -> Value = value.field(v, key) ?? value.null()
+local fn jget(v: Value, key: String) -> Value = value.get(v, key) ?? value.null()
 
 local fn jstr(v: Value, key: String) -> Option[String] =
   result.to_option(value.as_string(jget(v, key)))
@@ -53,10 +53,10 @@ local fn jstr_list(v: Value, key: String) -> List[String] =
 
 local fn jstr_map(v: Value, key: String) -> Map[String, String] = {
   let o = jget(v, key)
-  let ks: List[String] = value.keys(o)
+  let ks: List[String] = list.map(value.as_object(o) ?? [], (kv) => kv.0)
   var m: Map[String, String] = [:]
   for k in ks {
-    match result.to_option(value.as_string(value.field(o, k) ?? value.null())) {
+    match result.to_option(value.as_string(value.get(o, k) ?? value.null())) {
       some(s) => { m[k] = s },
       none    => (),
     }
@@ -67,7 +67,7 @@ local fn jstr_map(v: Value, key: String) -> Map[String, String] = {
 local fn str_map_to_value(m: Map[String, String]) -> Value = {
   var pairs: List[(String, Value)] = []
   for (k, s) in m {
-    pairs = pairs + [(k, value.str(s))]
+    pairs = pairs + [(k, value.string(s))]
   }
   value.object(pairs)
 }
@@ -77,21 +77,21 @@ local fn str_map_to_value(m: Map[String, String]) -> Value = {
 fn spec_encode(s: PersonaSpec) -> Value =
   value.object(
     [
-      ("name", value.str(s.name)),
-      ("display_name", value.str(s.display_name)),
-      ("language_default", value.str(s.language_default)),
-      ("model", value.str(s.model)),
+      ("name", value.string(s.name)),
+      ("display_name", value.string(s.display_name)),
+      ("language_default", value.string(s.language_default)),
+      ("model", value.string(s.model)),
       ("self_ref", str_map_to_value(s.self_ref)),
-      ("system_base", value.str(s.system_base)),
-      ("world", value.str(s.world)),
-      ("transforms", value.str(s.transforms)),
-      ("triggers", value.str(s.triggers)),
-      ("voice", value.str(s.voice)),
+      ("system_base", value.string(s.system_base)),
+      ("world", value.string(s.world)),
+      ("transforms", value.string(s.transforms)),
+      ("triggers", value.string(s.triggers)),
+      ("voice", value.string(s.voice)),
     ]
-      + (match s.voice_corpus { some(c) => [("voice_corpus", value.str(c))], none => [] })
+      + (match s.voice_corpus { some(c) => [("voice_corpus", value.string(c))], none => [] })
       + [
-          ("greeting", value.str(s.greeting)),
-          ("effects", value.object([("allowed", value.array(list.map(s.effects.allowed, (a) => value.str(a))))])),
+          ("greeting", value.string(s.greeting)),
+          ("effects", value.object([("allowed", value.array(list.map(s.effects.allowed, (a) => value.string(a))))])),
         ])
 
 fn spec_decode(v: Value) -> Result[PersonaSpec, String] = {
