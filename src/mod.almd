@@ -46,6 +46,6 @@ fn validate(p: Persona) -> Result[Unit, String] = {
   let dangling = list.fold(p.triggers.rules, []: List[String], (acc, rule) =>
     acc + list.filter(rule.suggest, (s) => not list.contains(names, s)))
   guard list.len(dangling) == 0 else
-    err("triggers reference unknown transforms: ${string.join(dangling, ", ")}")
+    err("triggers reference unknown transforms: ${list.join(dangling, ", ")}")
   ok(())
 }
